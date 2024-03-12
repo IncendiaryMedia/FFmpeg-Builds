@@ -1,8 +1,8 @@
 #!/bin/bash
 
 SCRIPT_REPO="https://github.com/FFmpeg/nv-codec-headers.git"
-SCRIPT_COMMIT="22441b505d9d9afc1e3002290820909846c24bdc"
-SCRIPT_BRANCH="sdk/12.0"
+SCRIPT_COMMIT="75f032b24263c2b684b9921755cafc1c08e41b9d"
+SCRIPT_BRANCH="master"
 
 SCRIPT_REPO2="https://github.com/FFmpeg/nv-codec-headers.git"
 SCRIPT_COMMIT2="18c24977c67a94d1969993444cf06ff91b0068a7"
@@ -10,6 +10,10 @@ SCRIPT_BRANCH2="sdk/11.1"
 
 ffbuild_enabled() {
     return 0
+}
+
+ffbuild_dockerstage() {
+    to_df "RUN --mount=src=${SELF},dst=/stage.sh --mount=src=${SELFCACHE},dst=/cache.tar.xz --mount=src=patches/ffnvcodec,dst=/patches run_stage /stage.sh"
 }
 
 ffbuild_dockerdl() {
@@ -23,6 +27,11 @@ ffbuild_dockerbuild() {
     else
         cd ffnvcodec
     fi
+
+    for patch in /patches/*.patch; do
+        echo "Applying $patch"
+        patch -p1 < "$patch"
+    done
 
     make PREFIX="$FFBUILD_PREFIX" install
 }
