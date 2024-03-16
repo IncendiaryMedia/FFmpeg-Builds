@@ -246,6 +246,8 @@ jobs:
       - name: Build ffmpeg
         run: |
           T="$(echo -n ${{ github.token }} | sha256sum | head -c 64)" && echo -e "::add-mask::${T}\n::stop-commands::${T}"
+          git config user.name "github-actions"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           ./build.sh ${{ matrix.target }} ${{ matrix.variant }}
       - name: Replace spaces in string
         id: strs
