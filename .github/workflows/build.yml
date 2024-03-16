@@ -20,8 +20,6 @@ on:
 
 env:
   DOCKER_BUILDKIT: 1
-  FFMPEG_REPO_OVERRIDE: 'https://github.com/IncendiaryMedia/ffmpeg.git'
-  GIT_BRANCH_OVERRIDE: 'nvenc-ertmp'
 
 jobs:
   pre_check:
